@@ -1,0 +1,34 @@
+version: '3'
+
+services:
+  nodejs:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: user-options-nodejs
+    container_name: user-options-nodejs
+    restart: unless-stopped
+    environment:
+      - MONGO_HOSTNAME=db
+    ports:
+      - "80:3021"
+    networks:
+      - app-network
+
+  db:
+    image: mongo:4.1.8-xenial
+    container_name: db
+    restart: unless-stopped
+    volumes:
+      - dbdata:/data/db
+    ports:
+    - "27017:27017"
+    networks:
+      - app-network
+
+networks:
+  app-network:
+    driver: bridge
+
+volumes:
+  dbdata:
