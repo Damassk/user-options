@@ -3,9 +3,12 @@ const {graphqlHTTP} = require('express-graphql');
 const schema = require('./schema/schema');
 const mongoose = require('mongoose');
 
+const port = process.env.PORT || 3021;
+const {MONGO_HOSTNAME = 'localhost', MONGO_PORT = '27017', MONGO_DB = 'userOptions'} = process.env;
+
 const app = express();
 
-mongoose.connect('mongodb://localhost:27017/userOptions', {
+mongoose.connect(`mongodb://${MONGO_HOSTNAME}:${MONGO_PORT}/${MONGO_DB}`, {
     useNewUrlParser: true,
     useUnifiedTopology: true,
     useFindAndModify: false
@@ -20,6 +23,6 @@ app.use('/graphql', graphqlHTTP({
     graphiql: true
 }));
 
-app.listen(3021, () => {
-    console.log('Server start on port 3021');
+app.listen(port, () => {
+    console.log(`Server start on port: ${port}`);
 });
